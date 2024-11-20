@@ -11,7 +11,7 @@ Objective: Hack the Linux machine, level: easy.
 ## Procedure
 I know why you're here. You need advice because you're still figuring this stuff out. Trust me, I was there too. We all hit walls sometimes. For example, it took me two hours just to grab the root flag.
 
-### Enumeration
+## Enumeration
 
 Alright, enumeration is key. Using nmap, we identify the services and other useful info.
 
@@ -38,7 +38,7 @@ It’s just a login and register page. Let’s register.
 
 ![Register](https://github.com/Diegomjx/Hack-the-box-Writeups/blob/master/easy/ChemistryHTB/Images/Register.png)
 
-### Ataquing
+## Ataquing
 
 Oh, we can upload files. This is interesting. Maybe we can drop a reverse shell. Let’s upload a CIF file.
 
@@ -112,7 +112,7 @@ sudo hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt
 
 ![attacking the hash](https://github.com/Diegomjx/Hack-the-box-Writeups/blob/master/easy/ChemistryHTB/Images/hashattack.png)
 
-### Privilage escalation
+## Privilage escalation
 
 Nice, we’ve got the password for "rose." Let’s try logging in via SSH.
 
